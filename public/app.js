@@ -2,107 +2,15 @@
 // VARIABLES DEL JUEGO
 // ========================
 
-// Incidencia activa
-let currentIncident = "";
+let currentIncident = null;
 
-// Puntos del jugador
 let score = 0;
-
-// Número de pods
+let money = 1000;
 let pods = 3;
-
-// SLA inicial
 let sla = 99.9;
 
-// Dinero disponible
-let money = 1000;
-
-// Tiempo para responder
 let timeLeft = 10;
-
-// Referencia al temporizador
 let timerInterval;
-
-
-// ========================
-// MÉTRICAS
-// ========================
-
-// Actualiza los datos mostrados en pantalla
-function updateMetrics() {
-
-  // CPU aleatoria
-  document.getElementById("cpu").textContent =
-    Math.floor(Math.random() * 100);
-
-  // Memoria aleatoria
-  document.getElementById("memory").textContent =
-    Math.floor(Math.random() * 100);
-
-  // Usuarios aleatorios
-  document.getElementById("users").textContent =
-    400 + Math.floor(Math.random() * 200);
-
-  // Dinero
-  document.getElementById("money").textContent =
-    money;
-
-  // Pods
-  document.getElementById("pods").textContent =
-    pods;
-
-  // SLA
-  document.getElementById("sla").textContent =
-    sla.toFixed(1);
-}
-
-
-// ========================
-// TEMPORIZADOR
-// ========================
-
-function startTimer() {
-
-  // Reinicia el contador
-  timeLeft = 10;
-
-  document.getElementById("timer").textContent =
-    timeLeft;
-
-  // Eliminar temporizador anterior
-  clearInterval(timerInterval);
-
-  timerInterval = setInterval(() => {
-
-    timeLeft--;
-
-    document.getElementById("timer").textContent =
-      timeLeft;
-
-    // Se acaba el tiempo
-    if (timeLeft <= 0) {
-
-      clearInterval(timerInterval);
-
-      score -= 15;
-      money -= 100;
-      sla -= 0.5;
-
-      showMessage(
-        "⏰ Tiempo agotado. -15 puntos y -100€"
-      );
-
-      updateScore();
-      updateMetrics();
-
-      checkGameOver();
-
-      // Nueva incidencia
-      generateIncident();
-    }
-
-  }, 1000);
-}
 
 
 // ========================
@@ -110,124 +18,44 @@ function startTimer() {
 // ========================
 
 const incidents = [
-  "🚨 CPU al 95%",
-  "🚨 Memoria al 98%",
-  "🚨 Pod caído",
-  "🚨 Latencia elevada",
-  "🚨 Error HTTP 500"
+  {
+    text: "🚨 CPU al 95%",
+    solution: "scale"
+  },
+  {
+    text: "🚨 Memoria al 98%",
+    solution: "restart"
+  },
+  {
+    text: "🚨 Pod caído",
+    solution: "restart"
+  }
 ];
 
-function generateIncident() {
-
-  const randomIndex =
-    Math.floor(Math.random() * incidents.length);
-
-  currentIncident =
-    incidents[randomIndex];
-
-  document.getElementById("incident").textContent =
-    currentIncident;
-
-  startTimer();
-}
-
 
 // ========================
-// ACCIONES
+// ACTUALIZAR PANTALLA
 // ========================
 
-// Escalar pods
-function scalePods() {
+function updateDashboard() {
 
-  if (currentIncident === "🚨 CPU al 95%") {
+  document.getElementById("cpu").textContent =
+    Math.floor(Math.random() * 100);
 
-    score += 10;
-    money += 100;
-    sla += 0.1;
-    pods++;
+  document.getElementById("memory").textContent =
+    Math.floor(Math.random() * 100);
 
-    showMessage(
-      "✅ CPU estabilizada. +10 puntos y +100€"
-    );
+  document.getElementById("users").textContent =
+    400 + Math.floor(Math.random() * 200);
 
-    clearIncident();
+  document.getElementById("money").textContent =
+    money;
 
-  } else {
+  document.getElementById("pods").textContent =
+    pods;
 
-    score -= 5;
-    money -= 50;
-    sla -= 0.2;
-
-    showMessage(
-      "❌ Acción incorrecta"
-    );
-  }
-
-  updateScore();
-  updateMetrics();
-  checkGameOver();
-}
-
-
-// Reiniciar servicio
-function restartService() {
-
-  if (
-    currentIncident === "🚨 Pod caído" ||
-    currentIncident === "🚨 Memoria al 98%"
-  ) {
-
-    score += 10;
-    money += 100;
-    sla += 0.1;
-
-    showMessage(
-      "✅ Servicio recuperado. +10 puntos y +100€"
-    );
-
-    clearIncident();
-
-  } else {
-
-    score -= 5;
-    money -= 50;
-    sla -= 0.2;
-
-    showMessage(
-      "❌ Acción incorrecta"
-    );
-  }
-
-  updateScore();
-  updateMetrics();
-  checkGameOver();
-}
-
-
-// Ignorar incidencia
-function ignoreIncident() {
-
-  score -= 10;
-  money -= 100;
-  sla -= 0.5;
-
-  showMessage(
-    "⚠️ Incidencia ignorada"
-  );
-
-  clearIncident();
-
-  updateScore();
-  updateMetrics();
-  checkGameOver();
-}
-
-
-// ========================
-// PUNTUACIÓN
-// ========================
-
-function updateScore() {
+  document.getElementById("sla").textContent =
+    sla.toFixed(1);
 
   document.getElementById("score").textContent =
     score;
@@ -246,70 +74,157 @@ function showMessage(text) {
 
 
 // ========================
-// LIMPIAR INCIDENCIA
+// TEMPORIZADOR
 // ========================
 
-function clearIncident() {
+function startTimer() {
 
   clearInterval(timerInterval);
 
-  currentIncident = "";
+  timeLeft = 10;
+
+  document.getElementById("timer").textContent =
+    timeLeft;
+
+  timerInterval = setInterval(() => {
+
+    timeLeft--;
+
+    document.getElementById("timer").textContent =
+      timeLeft;
+
+    if (timeLeft <= 0) {
+
+      clearInterval(timerInterval);
+
+      score -= 10;
+      money -= 100;
+      sla -= 0.5;
+
+      showMessage(
+        "⏰ Tiempo agotado"
+      );
+
+      updateDashboard();
+
+      generateIncident();
+    }
+
+  }, 1000);
+}
+
+
+// ========================
+// GENERAR INCIDENCIA
+// ========================
+
+function generateIncident() {
+
+  const randomIndex =
+    Math.floor(Math.random() * incidents.length);
+
+  currentIncident =
+    incidents[randomIndex];
 
   document.getElementById("incident").textContent =
-    "✅ Sin incidencias";
+    currentIncident.text;
+
+  startTimer();
 }
 
 
 // ========================
-// GAME OVER
+// RESOLVER INCIDENCIA
 // ========================
 
-function checkGameOver() {
+function solveIncident(action) {
 
-  if (sla <= 95) {
-
-    alert(
-      "💀 GAME OVER. El SLA ha caído por debajo del 95%"
-    );
-
-    location.reload();
+  if (!currentIncident) {
+    return;
   }
 
-  if (money <= 0) {
+  clearInterval(timerInterval);
 
-    alert(
-      "💀 GAME OVER. La empresa se ha quedado sin dinero"
+  if (action === currentIncident.solution) {
+
+    score += 10;
+    money += 100;
+    sla += 0.1;
+
+    if (action === "scale") {
+      pods++;
+    }
+
+    showMessage(
+      "✅ Incidencia resuelta correctamente"
     );
 
-    location.reload();
+  } else {
+
+    score -= 5;
+    money -= 50;
+    sla -= 0.2;
+
+    showMessage(
+      "❌ Acción incorrecta"
+    );
   }
-}
 
+  currentIncident = null;
 
-// ========================
-// ACTUALIZACIÓN PERIÓDICA
-// ========================
+  document.getElementById("incident").textContent =
+    "✅ Incidencia resuelta";
 
-// Métricas cada 3 segundos
-setInterval(updateMetrics, 3000);
+  updateDashboard();
 
-// Nueva incidencia cada 15 segundos
-setInterval(() => {
-
-  if (currentIncident === "") {
+  setTimeout(() => {
     generateIncident();
-  }
-
-}, 15000);
+  }, 2000);
+}
 
 
 // ========================
-// INICIO DEL JUEGO
+// BOTONES
 // ========================
 
-updateMetrics();
+function scalePods() {
+  solveIncident("scale");
+}
 
-updateScore();
+function restartService() {
+  solveIncident("restart");
+}
+
+function ignoreIncident() {
+
+  clearInterval(timerInterval);
+
+  score -= 10;
+  money -= 100;
+  sla -= 0.5;
+
+  showMessage(
+    "⚠️ Incidencia ignorada"
+  );
+
+  currentIncident = null;
+
+  document.getElementById("incident").textContent =
+    "⚠️ Incidencia ignorada";
+
+  updateDashboard();
+
+  setTimeout(() => {
+    generateIncident();
+  }, 2000);
+}
+
+
+// ========================
+// INICIO
+// ========================
+
+updateDashboard();
 
 showMessage(
   "Bienvenido al NOC Engineer Simulator"
