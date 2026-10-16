@@ -1,41 +1,65 @@
-// Guarda la incidencia actual
+// ========================
+// VARIABLES DEL JUEGO
+// ========================
+
+// Incidencia actual
 let currentIncident = "";
 
-// Guarda la puntuación del jugador
+// Puntuación
 let score = 0;
 
-// Esta función actualiza las métricas del panel
+// Número de pods inicial
+let pods = 3;
+
+// SLA inicial
+let sla = 99.9;
+
+
+// ========================
+// MÉTRICAS
+// ========================
+
 function updateMetrics() {
 
-  // Genera un valor aleatorio entre 0 y 99 para la CPU
+  // CPU aleatoria
   document.getElementById("cpu").textContent =
     Math.floor(Math.random() * 100);
 
-  // Genera un valor aleatorio entre 0 y 99 para la memoria
+  // Memoria aleatoria
   document.getElementById("memory").textContent =
     Math.floor(Math.random() * 100);
 
-  // Genera entre 400 y 599 usuarios
+  // Usuarios entre 400 y 600
   document.getElementById("users").textContent =
     400 + Math.floor(Math.random() * 200);
 
-  // Genera dinero entre 1000 y 1499 €
+  // Dinero entre 1000 y 1500
   document.getElementById("money").textContent =
     1000 + Math.floor(Math.random() * 500);
+
+  // Mostrar pods actuales
+  document.getElementById("pods").textContent = pods;
+
+  // Mostrar SLA actual
+  document.getElementById("sla").textContent = sla.toFixed(1);
 }
 
-// Ejecuta la función cada 3 segundos
+// Actualiza métricas cada 3 segundos
 setInterval(updateMetrics, 3000);
 
-// Lista de incidencias posibles
+
+// ========================
+// INCIDENCIAS
+// ========================
+
 const incidents = [
   "🚨 CPU al 95%",
-"🚨 Memoria al 98%",
-"🚨 Pod caído",
-"🚨 Latencia elevada",
-"🚨 Error HTTP 500"
-  ];
-// Genera una incidencia aleatoria
+  "🚨 Memoria al 98%",
+  "🚨 Pod caído",
+  "🚨 Latencia elevada",
+  "🚨 Error HTTP 500"
+];
+
 function generateIncident() {
 
   const randomIndex =
@@ -46,25 +70,34 @@ function generateIncident() {
   document.getElementById("incident").textContent =
     currentIncident;
 }
-// Genera una incidencia cada 10 segundos 
+
+// Nueva incidencia cada 10 segundos
 setInterval(generateIncident, 10000);
-// Escalar pods
+
+
+// ========================
+// ACCIONES
+// ========================
+
 function scalePods() {
 
   if (currentIncident === "🚨 CPU al 95%") {
 
     score += 10;
 
+    // Se añade un pod
+    pods++;
+
+    clearIncident();
+
   } else {
 
     score -= 5;
-
   }
 
   updateScore();
 }
 
-// Reiniciar servicio
 function restartService() {
 
   if (
@@ -74,24 +107,37 @@ function restartService() {
 
     score += 10;
 
+    clearIncident();
+
   } else {
 
     score -= 5;
-
   }
 
   updateScore();
 }
 
-// Ignorar incidencia
 function ignoreIncident() {
 
   score -= 10;
 
+  // Ignorar afecta al SLA
+  sla -= 0.1;
+
   updateScore();
+  updateMetrics();
 }
-// Actualiza los puntos mostrados en pantalla
+
+
+// ========================
+// PUNTUACIÓN
+// ========================
+
 function updateScore() {
 
-  document.getElementById("score").textContent = score;
+  document.getElementById("score").textContent =
+    score;
 }
+
+
+// ===
