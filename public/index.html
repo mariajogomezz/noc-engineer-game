@@ -13,12 +13,24 @@
     <p id="incident">
       ✅ Sin incidencias
     </p>
+    <h2>Acciones</h2>
+    <!-- Botón para escalar pods -->
+    <button onclick="scalePods()">
+      Escalar Pods
+    </button>
+    <!-- Botón para ignorar -->
+    <button onclick="ignoreIncident()">
+      Ignorar
+    </button>
     <p>CPU: <span id="cpu">30</span>%</p>
     <p>Memoria: <span id="memory">40</span>%</p>
     <p>Usuarios: <span id="users">500</span></p>
     <p>SLA: <span id="sla">99.9</span>%</p>
     <p>Dinero: <span id="money">1000</span>€</p>
     <p>Pods: <span id="pods">3</span></p>
+    <p>Dinero: <span id="money">1000</span>€</p>
+    <p>Pods: <span id="pods">3</span></p>
+    <p>Puntos: <span id="score">0</span></p>
   </div>
 <script src="app.js"></script> // Carga el archivo JavaScript en app.js, si no estuviera esta línea no se ejecutaría nunca 
 </body>
