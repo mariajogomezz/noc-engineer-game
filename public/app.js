@@ -20,3 +20,22 @@ function updateMetrics() {
 
 // Ejecuta la función cada 3 segundos
 setInterval(updateMetrics, 3000);
+
+// Lista de incidencias posibles
+const incidents = [
+  "🚨 CPU al 95%",
+"🚨 Memoria al 98%",
+"🚨 Pod caído",
+"🚨 Latencia elevada",
+"🚨 Error HTTP 500"
+  ];
+// Esta función selecciona una incidencia aleatoria
+function generateIncident() {
+  const randomIndex =
+    Math.floor(Math.random() * incidents.length);
+  document.getElementById("incident").textContent =
+    incidents[randomIndex];
+}
+
+// Genera una incidencia cada 10 segundos 
+setInterval(generateIncident, 10000);
