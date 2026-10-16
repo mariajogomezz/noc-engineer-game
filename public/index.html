@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NOC Engineer Game</title>
 
-    <!-- Carga los estilos -->
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <h1>NOC Engineer Game</h1>
 
-    <!-- Panel principal de monitorización -->
+    <!-- Panel principal -->
     <div class="panel">
         <p>CPU: <span id="cpu">30</span>%</p>
         <p>Memoria: <span id="memory">40</span>%</p>
@@ -23,29 +24,32 @@
         <p>Puntos: <span id="score">0</span></p>
     </div>
 
-    <!-- Incidencia actual -->
+    <!-- Incidente -->
     <div class="panel">
         <h2>Incidente activo</h2>
         <p id="incident">✅ Sin incidencias</p>
     </div>
-<div class="panel">
-  <h2>Última acción</h2>
-  <p id="message">
-    Bienvenido al NOC Engineer Simulator
-  </p>
-</div>
-``
-    <div class="panel">
-  <h2>Tiempo de respuesta</h2>
 
-  <p>
-    ⏱ Tiempo restante:
-    <span id="timer">10</span>
-    segundos
-  </p>
-</div>
-`
-    <!-- Acciones del jugador -->
+    <!-- Última acción -->
+    <div class="panel">
+        <h2>Última acción</h2>
+        <p id="message">
+            Bienvenido al NOC Engineer Simulator
+        </p>
+    </div>
+
+    <!-- Temporizador -->
+    <div class="panel">
+        <h2>Tiempo de respuesta</h2>
+
+        <p>
+            ⏱ Tiempo restante:
+            <span id="timer">10</span>
+            segundos
+        </p>
+    </div>
+
+    <!-- Acciones -->
     <div class="panel">
         <h2>Acciones</h2>
 
@@ -62,8 +66,8 @@
         </button>
     </div>
 
-    <!-- Carga la lógica del juego -->
     <script src="app.js"></script>
 
 </body>
+
 </html>
