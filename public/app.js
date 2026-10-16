@@ -1,3 +1,5 @@
+console.log("VERSION 16-OCT-2026");
+
 // ========================
 // VARIABLES DEL JUEGO
 // ========================
