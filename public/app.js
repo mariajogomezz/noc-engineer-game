@@ -17,6 +17,11 @@ let sla = 99.9;
 // Dinero disponible
 let money = 1000;
 
+// Tiempo máximo para actuar 
+let timeLeft = 10;
+
+// Referencia al intervalo del reloj
+let TimeInterval;
 
 // ========================
 // MÉTRICAS
@@ -53,6 +58,52 @@ function updateMetrics() {
 // Actualiza métricas cada 3 segundos
 setInterval(updateMetrics, 3000);
 
+// ========================
+// TEMPORIZADOR
+// ========================
+
+function startTimer() {
+
+  // Reinicia el contador
+  timeLeft = 10;
+
+  document.getElementById("timer").textContent =
+    timeLeft;
+
+  // Evita tener varios intervalos activos
+  clearInterval(timerInterval);
+
+  timerInterval = setInterval(() => {
+
+    timeLeft--;
+
+    document.getElementById("timer").textContent =
+      timeLeft;
+
+    // Si el tiempo se acaba
+    if (timeLeft <= 0) {
+
+      clearInterval(timerInterval);
+
+      score -= 15;
+      money -= 100;
+      sla -= 0.5;
+
+      showMessage(
+        "⏰ No has respondido a tiempo"
+      );
+
+      updateScore();
+      updateMetrics();
+
+      // Nueva incidencia automáticamente
+      generateIncident();
+    }
+
+  }, 1000);
+
+}
+`
 
 // ========================
 // INCIDENCIAS
@@ -78,6 +129,8 @@ function generateIncident() {
 
   document.getElementById("incident").textContent =
     currentIncident;
+    startTimer();
+    ``
 }
 
 // Nueva incidencia cada 10 segundos
@@ -202,7 +255,7 @@ function showMessage(text) {
 
 // Elimina la incidencia actual
 function clearIncident() {
-
+clearInterval(timerInterval);
   currentIncident = "";
 
   document.getElementById("incident").textContent =
@@ -249,4 +302,5 @@ updateScore();
 // Mostrar mensaje inicial
 showMessage(
   "Bienvenido al NOC Engineer Simulator"
+  generateIncident();
 );
