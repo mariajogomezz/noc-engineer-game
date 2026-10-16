@@ -34,7 +34,7 @@ const incidents = [
 
 
 // ========================
-// ACTUALIZAR PANTALLA
+// DASHBOARD
 // ========================
 
 function updateDashboard() {
@@ -120,8 +120,9 @@ function startTimer() {
 
 function generateIncident() {
 
-  const randomIndex =
-    Math.floor(Math.random() * incidents.length);
+  const randomIndex = Math.floor(
+    Math.random() * incidents.length
+  );
 
   currentIncident =
     incidents[randomIndex];
@@ -221,7 +222,7 @@ function ignoreIncident() {
 
 
 // ========================
-// INICIO
+// INICIO DEL JUEGO
 // ========================
 
 updateDashboard();
