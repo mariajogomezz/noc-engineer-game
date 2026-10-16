@@ -17,7 +17,7 @@ let sla = 99.9;
 // Dinero disponible
 let money = 1000;
 
-// Tiempo disponible para responder
+// Tiempo para responder
 let timeLeft = 10;
 
 // Referencia al temporizador
@@ -31,52 +31,47 @@ let timerInterval;
 // Actualiza los datos mostrados en pantalla
 function updateMetrics() {
 
-  // CPU aleatoria entre 0 y 99
+  // CPU aleatoria
   document.getElementById("cpu").textContent =
     Math.floor(Math.random() * 100);
 
-  // Memoria aleatoria entre 0 y 99
+  // Memoria aleatoria
   document.getElementById("memory").textContent =
     Math.floor(Math.random() * 100);
 
-  // Usuarios entre 400 y 600
+  // Usuarios aleatorios
   document.getElementById("users").textContent =
     400 + Math.floor(Math.random() * 200);
 
-  // Dinero actual
+  // Dinero
   document.getElementById("money").textContent =
     money;
 
-  // Pods actuales
+  // Pods
   document.getElementById("pods").textContent =
     pods;
 
-  // SLA actual
+  // SLA
   document.getElementById("sla").textContent =
     sla.toFixed(1);
 }
-
-// Actualizar métricas cada 3 segundos
-setInterval(updateMetrics, 3000);
 
 
 // ========================
 // TEMPORIZADOR
 // ========================
 
-// Inicia el reloj de respuesta
 function startTimer() {
 
-  // Volvemos a 10 segundos
+  // Reinicia el contador
   timeLeft = 10;
 
   document.getElementById("timer").textContent =
     timeLeft;
 
-  // Paramos cualquier temporizador anterior
+  // Eliminar temporizador anterior
   clearInterval(timerInterval);
 
-  // Iniciamos uno nuevo
   timerInterval = setInterval(() => {
 
     timeLeft--;
@@ -84,7 +79,7 @@ function startTimer() {
     document.getElementById("timer").textContent =
       timeLeft;
 
-    // Si el tiempo se agota
+    // Se acaba el tiempo
     if (timeLeft <= 0) {
 
       clearInterval(timerInterval);
@@ -107,7 +102,6 @@ function startTimer() {
     }
 
   }, 1000);
-
 }
 
 
@@ -115,7 +109,6 @@ function startTimer() {
 // INCIDENCIAS
 // ========================
 
-// Lista de incidencias
 const incidents = [
   "🚨 CPU al 95%",
   "🚨 Memoria al 98%",
@@ -124,7 +117,6 @@ const incidents = [
   "🚨 Error HTTP 500"
 ];
 
-// Genera una incidencia aleatoria
 function generateIncident() {
 
   const randomIndex =
@@ -136,16 +128,12 @@ function generateIncident() {
   document.getElementById("incident").textContent =
     currentIncident;
 
-  // Reiniciar reloj
   startTimer();
 }
 
-// Nueva incidencia cada 10 segundos
-setInterval(generateIncident, 10000);
-
 
 // ========================
-// ACCIONES DEL JUGADOR
+// ACCIONES
 // ========================
 
 // Escalar pods
@@ -159,7 +147,7 @@ function scalePods() {
     pods++;
 
     showMessage(
-      "✅ CPU estabilizada: +10 puntos y +100€"
+      "✅ CPU estabilizada. +10 puntos y +100€"
     );
 
     clearIncident();
@@ -194,7 +182,137 @@ function restartService() {
     sla += 0.1;
 
     showMessage(
-      "✅ Servicio recuperado"
+      "✅ Servicio recuperado. +10 puntos y +100€"
     );
 
- 
+    clearIncident();
+
+  } else {
+
+    score -= 5;
+    money -= 50;
+    sla -= 0.2;
+
+    showMessage(
+      "❌ Acción incorrecta"
+    );
+  }
+
+  updateScore();
+  updateMetrics();
+  checkGameOver();
+}
+
+
+// Ignorar incidencia
+function ignoreIncident() {
+
+  score -= 10;
+  money -= 100;
+  sla -= 0.5;
+
+  showMessage(
+    "⚠️ Incidencia ignorada"
+  );
+
+  clearIncident();
+
+  updateScore();
+  updateMetrics();
+  checkGameOver();
+}
+
+
+// ========================
+// PUNTUACIÓN
+// ========================
+
+function updateScore() {
+
+  document.getElementById("score").textContent =
+    score;
+}
+
+
+// ========================
+// MENSAJES
+// ========================
+
+function showMessage(text) {
+
+  document.getElementById("message").textContent =
+    text;
+}
+
+
+// ========================
+// LIMPIAR INCIDENCIA
+// ========================
+
+function clearIncident() {
+
+  clearInterval(timerInterval);
+
+  currentIncident = "";
+
+  document.getElementById("incident").textContent =
+    "✅ Sin incidencias";
+}
+
+
+// ========================
+// GAME OVER
+// ========================
+
+function checkGameOver() {
+
+  if (sla <= 95) {
+
+    alert(
+      "💀 GAME OVER. El SLA ha caído por debajo del 95%"
+    );
+
+    location.reload();
+  }
+
+  if (money <= 0) {
+
+    alert(
+      "💀 GAME OVER. La empresa se ha quedado sin dinero"
+    );
+
+    location.reload();
+  }
+}
+
+
+// ========================
+// ACTUALIZACIÓN PERIÓDICA
+// ========================
+
+// Métricas cada 3 segundos
+setInterval(updateMetrics, 3000);
+
+// Nueva incidencia cada 15 segundos
+setInterval(() => {
+
+  if (currentIncident === "") {
+    generateIncident();
+  }
+
+}, 15000);
+
+
+// ========================
+// INICIO DEL JUEGO
+// ========================
+
+updateMetrics();
+
+updateScore();
+
+showMessage(
+  "Bienvenido al NOC Engineer Simulator"
+);
+
+generateIncident();
