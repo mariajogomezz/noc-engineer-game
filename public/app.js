@@ -1,4 +1,4 @@
-console.log("VERSION 16-OCT-2026");
+console.log("VERSION SIN RELOJ");
 
 // ========================
 // VARIABLES DEL JUEGO
@@ -10,9 +10,6 @@ let score = 0;
 let money = 1000;
 let pods = 3;
 let sla = 99.9;
-
-let timeLeft = 10;
-let timerInterval;
 
 
 // ========================
@@ -76,47 +73,6 @@ function showMessage(text) {
 
 
 // ========================
-// TEMPORIZADOR
-// ========================
-
-function startTimer() {
-
-  clearInterval(timerInterval);
-
-  timeLeft = 10;
-
-  document.getElementById("timer").textContent =
-    timeLeft;
-
-  timerInterval = setInterval(() => {
-
-    timeLeft--;
-
-    document.getElementById("timer").textContent =
-      timeLeft;
-
-    if (timeLeft <= 0) {
-
-      clearInterval(timerInterval);
-
-      score -= 10;
-      money -= 100;
-      sla -= 0.5;
-
-      showMessage(
-        "⏰ Tiempo agotado"
-      );
-
-      updateDashboard();
-
-      generateIncident();
-    }
-
-  }, 1000);
-}
-
-
-// ========================
 // GENERAR INCIDENCIA
 // ========================
 
@@ -131,8 +87,6 @@ function generateIncident() {
 
   document.getElementById("incident").textContent =
     currentIncident.text;
-
-  startTimer();
 }
 
 
@@ -145,8 +99,6 @@ function solveIncident(action) {
   if (!currentIncident) {
     return;
   }
-
-  clearInterval(timerInterval);
 
   if (action === currentIncident.solution) {
 
@@ -200,8 +152,6 @@ function restartService() {
 
 function ignoreIncident() {
 
-  clearInterval(timerInterval);
-
   score -= 10;
   money -= 100;
   sla -= 0.5;
@@ -221,6 +171,15 @@ function ignoreIncident() {
     generateIncident();
   }, 2000);
 }
+
+
+// ========================
+// ACTUALIZACIÓN DE MÉTRICAS
+// ========================
+
+setInterval(() => {
+  updateDashboard();
+}, 3000);
 
 
 // ========================
