@@ -1,3 +1,9 @@
+// Guarda la incidencia actual
+let currentIncident = "";
+
+// Guarda la puntuación del jugador
+let score = 0;
+
 // Esta función actualiza las métricas del panel
 function updateMetrics() {
 
@@ -29,13 +35,63 @@ const incidents = [
 "🚨 Latencia elevada",
 "🚨 Error HTTP 500"
   ];
-// Esta función selecciona una incidencia aleatoria
+// Genera una incidencia aleatoria
 function generateIncident() {
+
   const randomIndex =
     Math.floor(Math.random() * incidents.length);
-  document.getElementById("incident").textContent =
-    incidents[randomIndex];
-}
 
+  currentIncident = incidents[randomIndex];
+
+  document.getElementById("incident").textContent =
+    currentIncident;
+}
 // Genera una incidencia cada 10 segundos 
 setInterval(generateIncident, 10000);
+// Escalar pods
+function scalePods() {
+
+  if (currentIncident === "🚨 CPU al 95%") {
+
+    score += 10;
+
+  } else {
+
+    score -= 5;
+
+  }
+
+  updateScore();
+}
+
+// Reiniciar servicio
+function restartService() {
+
+  if (
+    currentIncident === "🚨 Pod caído" ||
+    currentIncident === "🚨 Memoria al 98%"
+  ) {
+
+    score += 10;
+
+  } else {
+
+    score -= 5;
+
+  }
+
+  updateScore();
+}
+
+// Ignorar incidencia
+function ignoreIncident() {
+
+  score -= 10;
+
+  updateScore();
+}
+// Actualiza los puntos mostrados en pantalla
+function updateScore() {
+
+  document.getElementById("score").textContent = score;
+}
